@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AK ADMIN PANAL</title>
+    <title>AK ADMIN PANEL</title>
     <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -13,7 +14,7 @@
             font-family: 'El Messiri', sans-serif;
         }
         body {
-            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2oDmojkeoNTI4cG5BZSDyuULiORBLxc0_Kw&usqp=CAU') no-repeat center center/cover;
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaUefxA6uYUk7SNTE-zautkRqmg6CK-4irbhgcysqWRJRbSK0tnS8hp_XV&s=10') no-repeat center center/cover;
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -147,6 +148,89 @@
         .copy-btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
+        
+        /* NEW FEATURES BELOW */
+        
+        /* Key stats display */
+        .key-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff8a00;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Password toggle */
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast i {
+            font-size: 20px;
+        }
+        .toast.success i {
+            color: #4caf50;
+        }
+        .toast.error i {
+            color: #f44336;
+        }
+        
+        /* Key expiration timer */
+        .expiration-timer {
+            margin-top: 10px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 500px) {
+            .holder {
+                width: 90%;
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -154,9 +238,26 @@
         <div class="box">
             <img src="https://i.ibb.co/G4K2gbqb/Picsart-25-03-02-22-15-39-762.png" class="floating-img" alt="Logo">
             <h2>WELCOME TO AK ADMIN PANEL</h2>
+            
+            <div class="key-stats">
+                <div class="stat">
+                    <div class="stat-value" id="totalKeys">100</div>
+                    <div class="stat-label">Total Keys</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="availableKeys">100</div>
+                    <div class="stat-label">Available</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="usedKeys">0</div>
+                    <div class="stat-label">Used</div>
+                </div>
+            </div>
+            
             <div class="inputBox">
-                <input type="text" id="adminKey" required>
+                <input type="password" id="adminKey" required>
                 <span>Enter Admin Key</span>
+                <i class="fas fa-eye password-toggle" onclick="togglePasswordVisibility()"></i>
             </div>
             <input type="submit" value="Generate Key" onclick="generateKey()">
             
@@ -164,16 +265,27 @@
                 <div class="key-display">
                     <strong>Generated Key:</strong>
                     <div id="generatedKey"></div>
-                    <button class="copy-btn" onclick="copyToClipboard()">Copy Key</button>
+                    <button class="copy-btn" onclick="copyToClipboard()">
+                        <i class="far fa-copy"></i> Copy Key
+                    </button>
+                    <div class="expiration-timer">
+                        <i class="fas fa-clock"></i> Expires in: <span id="expirationTimer">24:00:00</span>
+                    </div>
                 </div>
             </div>
             
-            <div class="footer-text">Admin Access Only</div>
+            <div class="footer-text">Admin Access Only | Secured Connection <i class="fas fa-lock"></i></div>
         </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Success message</span>
     </div>
 
     <script>
-        // Pre-generated keys (100 keys)
+        // Original key management system
         const allKeys = [
             "wingo-7x9p-2k4r-8z3q", "wingo-1a2b-3c4d-5e6f", "wingo-9y8z-7x6w-5v4u",
             "wingo-q1w2-e3r4-t5y6", "wingo-u7i8-o9p0-a1s2", "wingo-d3f4-g5h6-j7k8",
@@ -213,17 +325,114 @@
 
         let availableKeys = [...allKeys];
         const ADMIN_KEY = "123";
+        
+        // NEW FEATURES: Timer variables
+        let expirationInterval;
+        const EXPIRATION_TIME = 24 * 60 * 60; // 24 hours in seconds
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load keys from localStorage if available
+            const storedAvailableKeys = localStorage.getItem('availableKeys');
+            if (storedAvailableKeys) {
+                availableKeys = JSON.parse(storedAvailableKeys);
+            }
+            
+            // Update key stats
+            updateKeyStats();
+            
+            // Focus on the admin key input
+            document.getElementById('adminKey').focus();
+        });
+        
+        // NEW FEATURE: Update key statistics display
+        function updateKeyStats() {
+            document.getElementById('totalKeys').textContent = allKeys.length;
+            document.getElementById('availableKeys').textContent = availableKeys.length;
+            document.getElementById('usedKeys').textContent = allKeys.length - availableKeys.length;
+        }
+        
+        // NEW FEATURE: Toggle password visibility
+        function togglePasswordVisibility() {
+            const input = document.getElementById('adminKey');
+            const icon = document.querySelector('.password-toggle');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+        
+        // NEW FEATURE: Show toast notification
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const icon = toast.querySelector('i');
+            
+            toastMessage.textContent = message;
+            toast.className = 'toast';
+            
+            if (isError) {
+                toast.classList.add('error');
+                icon.className = 'fas fa-exclamation-circle';
+            } else {
+                toast.classList.add('success');
+                icon.className = 'fas fa-check-circle';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // NEW FEATURE: Start expiration timer
+        function startExpirationTimer() {
+            let secondsLeft = EXPIRATION_TIME;
+            
+            // Clear any existing timer
+            if (expirationInterval) {
+                clearInterval(expirationInterval);
+            }
+            
+            // Update immediately
+            updateTimerDisplay(secondsLeft);
+            
+            // Update every second
+            expirationInterval = setInterval(() => {
+                secondsLeft--;
+                updateTimerDisplay(secondsLeft);
+                
+                if (secondsLeft <= 0) {
+                    clearInterval(expirationInterval);
+                }
+            }, 1000);
+        }
+        
+        // NEW FEATURE: Update timer display
+        function updateTimerDisplay(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            
+            document.getElementById('expirationTimer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
 
         function generateKey() {
             const adminKeyInput = document.getElementById('adminKey').value;
             
             if (adminKeyInput !== ADMIN_KEY) {
-                alert("Invalid admin key!");
+                showToast("Invalid admin key!", true);
                 return;
             }
 
             if (availableKeys.length === 0) {
-                alert("All keys have been generated!");
+                showToast("All keys have been generated!", true);
                 return;
             }
 
@@ -237,26 +446,36 @@
             // Display the generated key
             document.getElementById('generatedKey').textContent = generatedKey;
             document.getElementById('generatedKeyContainer').style.display = 'block';
+            
+            // NEW: Start expiration timer
+            startExpirationTimer();
 
             // Store the used keys in localStorage
             localStorage.setItem('usedKeys', JSON.stringify(allKeys.filter(key => !availableKeys.includes(key))));
             localStorage.setItem('availableKeys', JSON.stringify(availableKeys));
+            
+            // NEW: Update stats
+            updateKeyStats();
+            
+            // NEW: Show success message
+            showToast("Key generated successfully!");
         }
 
         function copyToClipboard() {
             const keyText = document.getElementById('generatedKey').textContent;
-            navigator.clipboard.writeText(keyText)
-                .then(() => alert("Key copied to clipboard!"))
-                .catch(err => console.error("Failed to copy: ", err));
-        }
-
-        // Initialize available keys from localStorage if available
-        document.addEventListener('DOMContentLoaded', function() {
-            const storedAvailableKeys = localStorage.getItem('availableKeys');
-            if (storedAvailableKeys) {
-                availableKeys = JSON.parse(storedAvailableKeys);
+            
+            if (!keyText) {
+                showToast("No key to copy!", true);
+                return;
             }
-        });
+            
+            navigator.clipboard.writeText(keyText)
+                .then(() => showToast("Key copied to clipboard!"))
+                .catch(err => {
+                    console.error("Failed to copy: ", err);
+                    showToast("Failed to copy key", true);
+                });
+        }
     </script>
 </body>
 </html>
