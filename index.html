@@ -3,91 +3,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SURYA AK WINGO</title>
-    <link href="https://fonts.googleapis.com/css2?family=El+Messiri&display=swap" rel="stylesheet">
+    <title>AK ADMIN PANAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'El Messiri', sans-serif;
-            text-align: center;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'El Messiri', sans-serif;
+        }
+        body {
             background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaUefxA6uYUk7SNTE-zautkRqmg6CK-4irbhgcysqWRJRbSK0tnS8hp_XV&s=10') no-repeat center center/cover;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
-      
-
-        .container {
+        .holder {
+            position: absolute;
+            width: 450px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.8s ease-out;
+            color: white;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .box h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        .floating-img {
+            display: block;
+            margin: 0 auto 20px;
+            width: 120px;
+            animation: floatUpDown 3s infinite alternate ease-in-out;
+            filter: drop-shadow(0 5px 15px rgba(255, 255, 255, 0.3));
+        }
+        @keyframes floatUpDown {
+            0% {
+                transform: translateY(0px);
+            }
+            100% {
+                transform: translateY(-15px);
+            }
+        }
+        .inputBox {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .inputBox input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            outline: none;
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            width: 320px;
             color: white;
+            font-size: 16px;
+            transition: all 0.3s;
         }
-        .result-box {
-            margin: 20px 0;
-            font-size: 20px;
+        .inputBox input:focus {
+            border-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
-        .result-text {
+        .inputBox span {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            pointer-events: none;
+            transition: 0.3s;
+        }
+        .inputBox input:focus + span,
+        .inputBox input:valid + span {
+            top: 0;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0 5px;
+            color: #fff;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: linear-gradient(45deg, #ff8a00, #e52e71);
             color: white;
+            font-size: 16px;
             font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        input[type="submit"]:hover {
+            background: linear-gradient(45deg, #e52e71, #ff8a00);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .key-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 18px;
+            word-break: break-all;
+        }
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
 <body>
-
-   <!--Ye website Team SRS ne leak ki hai aur aise saari websites ka source bhi leak hoga. DM karein for more source code aur follow karein @enzosrs -->
-   <!-- This Web Free By #enzo #dev-->
-
-    <div class="container">
-        <h1>SURYA AK K3</h1>
-        <div class="result-box">
-            <p>Period: <span id="period">000000</span></p>
-            <p>Timer: <span id="timer">00:60</span></p>
-            <p>Result: <span id="result" class="result-text">Pending...</span></p>
+    <div class="holder">
+        <div class="box">
+            <img src="https://i.ibb.co/G4K2gbqb/Picsart-25-03-02-22-15-39-762.png" class="floating-img" alt="Logo">
+            <h2>WELCOME TO AK ADMIN PANEL</h2>
+            <div class="inputBox">
+                <input type="text" id="adminKey" required>
+                <span>Enter Admin Key</span>
+            </div>
+            <input type="submit" value="Generate Key" onclick="generateKey()">
+            
+            <div id="generatedKeyContainer" style="display: none;">
+                <div class="key-display">
+                    <strong>Generated Key:</strong>
+                    <div id="generatedKey"></div>
+                    <button class="copy-btn" onclick="copyToClipboard()">Copy Key</button>
+                </div>
+            </div>
+            
+            <div class="footer-text">Admin Access Only</div>
         </div>
     </div>
-   <!--Ye website Team SRS ne leak ki hai aur aise saari websites ka source bhi leak hoga. DM karein for more source code aur follow karein @enzosrs -->
-   <!-- This Web Free By #enzo #dev-->
+
     <script>
-        let lastPeriod = ""; 
+        // Pre-generated keys (100 keys)
+        const allKeys = [
+            "wingo-7x9p-2k4r-8z3q", "wingo-1a2b-3c4d-5e6f", "wingo-9y8z-7x6w-5v4u",
+            "wingo-q1w2-e3r4-t5y6", "wingo-u7i8-o9p0-a1s2", "wingo-d3f4-g5h6-j7k8",
+            "wingo-l9m0-n1b2-v3c4", "wingo-x5z6-q7w8-s9e0", "wingo-r1t2-y3u4-i5o6",
+            "wingo-p7a8-s9d0-f1g2", "wingo-h3j4-k5l6-z7x8", "wingo-c9v0-b1n2-m3q4",
+            "wingo-w5e6-r7t8-y9u0", "wingo-i1o2-p3a4-s5d6", "wingo-f7g8-h9j0-k1l2",
+            "wingo-z3x4-c5v6-b7n8", "wingo-m9q0-w1e2-r3t4", "wingo-y5u6-i7o8-p9a0",
+            "wingo-s1d2-f3g4-h5j6", "wingo-k7l8-z9x0-c1v2", "wingo-b3n4-m5q6-w7e8",
+            "wingo-r9t0-y1u2-i3o4", "wingo-p5a6-s7d8-f9g0", "wingo-h1j2-k3l4-z5x6",
+            "wingo-c7v8-b9n0-m1q2", "wingo-w3e4-r5t6-y7u8", "wingo-i9o0-p1a2-s3d4",
+            "wingo-f5g6-h7j8-k9l0", "wingo-z1x2-c3v4-b5n6", "wingo-m7q8-w9e0-r1t2",
+            "wingo-y3u4-i5o6-p7a8", "wingo-s9d0-f1g2-h3j4", "wingo-k5l6-z7x8-c9v0",
+            "wingo-b1n2-m3q4-w5e6", "wingo-r7t8-y9u0-i1o2", "wingo-p3a4-s5d6-f7g8",
+            "wingo-h9j0-k1l2-z3x4", "wingo-c5v6-b7n8-m9q0", "wingo-w1e2-r3t4-y5u6",
+            "wingo-i7o8-p9a0-s1d2", "wingo-f3g4-h5j6-k7l8", "wingo-z9x0-c1v2-b3n4",
+            "wingo-m5q6-w7e8-r9t0", "wingo-y1u2-i3o4-p5a6", "wingo-s7d8-f9g0-h1j2",
+            "wingo-k3l4-z5x6-c7v8", "wingo-b9n0-m1q2-w3e4", "wingo-r5t6-y7u8-i9o0",
+            "wingo-p1a2-s3d4-f5g6", "wingo-h7j8-k9l0-z1x2", "wingo-c3v4-b5n6-m7q8",
+            "wingo-w9e0-r1t2-y3u4", "wingo-i5o6-p7a8-s9d0", "wingo-f1g2-h3j4-k5l6",
+            "wingo-z7x8-c9v0-b1n2", "wingo-m3q4-w5e6-r7t8", "wingo-y9u0-i1o2-p3a4",
+            "wingo-s5d6-f7g8-h9j0", "wingo-k1l2-z3x4-c5v6", "wingo-b7n8-m9q0-w1e2",
+            "wingo-r3t4-y5u6-i7o8", "wingo-p9a0-s1d2-f3g4", "wingo-h5j6-k7l8-z9x0",
+            "wingo-c1v2-b3n4-m5q6", "wingo-w7e8-r9t0-y1u2", "wingo-i3o4-p5a6-s7d8",
+            "wingo-f9g0-h1j2-k3l4", "wingo-z5x6-c7v8-b9n0", "wingo-m1q2-w3e4-r5t6",
+            "wingo-y7u8-i9o0-p1a2", "wingo-s3d4-f5g6-h7j8", "wingo-k9l0-z1x2-c3v4",
+            "wingo-b5n6-m7q8-w9e0", "wingo-r1t2-y3u4-i5o6", "wingo-p7a8-s9d0-f1g2",
+            "wingo-h3j4-k5l6-z7x8", "wingo-c9v0-b1n2-m3q4", "wingo-w5e6-r7t8-y9u0",
+            "wingo-i1o2-p3a4-s5d6", "wingo-f7g8-h9j0-k1l2", "wingo-z3x4-c5v6-b7n8",
+            "wingo-m9q0-w1e2-r3t4", "wingo-y5u6-i7o8-p9a0", "wingo-s1d2-f3g4-h5j6",
+            "wingo-k7l8-z9x0-c1v2", "wingo-b3n4-m5q6-w7e8", "wingo-r9t0-y1u2-i3o4",
+            "wingo-p5a6-s7d8-f9g0", "wingo-h1j2-k3l4-z5x6", "wingo-c7v8-b9n0-m1q2",
+            "wingo-w3e4-r5t6-y7u8", "wingo-i9o0-p1a2-s3d4", "wingo-f5g6-h7j8-k9l0",
+            "wingo-z1x2-c3v4-b5n6", "wingo-m7q8-w9e0-r1t2", "wingo-y3u4-i5o6-p7a8",
+            "wingo-s9d0-f1g2-h3j4", "wingo-k5l6-z7x8-c9v0", "wingo-b1n2-m3q4-w5e6",
+            "wingo-r7t8-y9u0-i1o2", "wingo-p3a4-s5d6-f7g8", "wingo-h9j0-k1l2-z3x4"
+        ];
 
-        function updatePeriodAndTimer() {
-            let now = new Date();
-            let calendar = new Date(now.getTime() + now.getTimezoneOffset() * 60000); 
-            let seconds = calendar.getSeconds();
-            let remainingSeconds = 60 - seconds;
-            let minutes = calendar.getMinutes();
-            let totalMinutes = calendar.getHours() * 60 + minutes;
+        let availableKeys = [...allKeys];
+        const ADMIN_KEY = "123";
 
-            let periodNumber = new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })
-                .format(calendar)
-                .replace(/\//g, '') + "1000" + (10001 + totalMinutes);
-
-            if (periodNumber !== lastPeriod) {
-                lastPeriod = periodNumber;
-                generateResult(); 
+        function generateKey() {
+            const adminKeyInput = document.getElementById('adminKey').value;
+            
+            if (adminKeyInput !== ADMIN_KEY) {
+                alert("Invalid admin key!");
+                return;
             }
 
-            document.getElementById("period").innerText = periodNumber;
-            document.getElementById("timer").innerText = `00:${String(remainingSeconds).padStart(2, '0')}`;
+            if (availableKeys.length === 0) {
+                alert("All keys have been generated!");
+                return;
+            }
 
-            setTimeout(updatePeriodAndTimer, 1000);
+            // Get a random key from available keys
+            const randomIndex = Math.floor(Math.random() * availableKeys.length);
+            const generatedKey = availableKeys[randomIndex];
+            
+            // Remove the used key from available keys
+            availableKeys.splice(randomIndex, 1);
+
+            // Display the generated key
+            document.getElementById('generatedKey').textContent = generatedKey;
+            document.getElementById('generatedKeyContainer').style.display = 'block';
+
+            // Store the used keys in localStorage
+            localStorage.setItem('usedKeys', JSON.stringify(allKeys.filter(key => !availableKeys.includes(key))));
+            localStorage.setItem('availableKeys', JSON.stringify(availableKeys));
         }
 
-        function generateResult() {
-            let randomNumber = Math.floor(Math.random() * 100);
-            let oddEven = randomNumber % 2 === 0 ? "EVEN" : "ODD";
-            document.getElementById("result").innerText = oddEven;
+        function copyToClipboard() {
+            const keyText = document.getElementById('generatedKey').textContent;
+            navigator.clipboard.writeText(keyText)
+                .then(() => alert("Key copied to clipboard!"))
+                .catch(err => console.error("Failed to copy: ", err));
         }
 
-        updatePeriodAndTimer();
+        // Initialize available keys from localStorage if available
+        document.addEventListener('DOMContentLoaded', function() {
+            const storedAvailableKeys = localStorage.getItem('availableKeys');
+            if (storedAvailableKeys) {
+                availableKeys = JSON.parse(storedAvailableKeys);
+            }
+        });
     </script>
-   <!--Ye website Team SRS ne leak ki hai aur aise saari websites ka source bhi leak hoga. DM karein for more source code aur follow karein @enzosrs -->
-   <!-- This Web Free By #enzo #dev-->
 </body>
 </html>
